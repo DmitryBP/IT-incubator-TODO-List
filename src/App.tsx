@@ -12,7 +12,6 @@ function App() {
       return <TodoList key={i}
         title={el.title}
         todoItemsList={el.todoItemsList}
-        // deliteListItem = {deliteListItem}
       />
       })}
     </div>

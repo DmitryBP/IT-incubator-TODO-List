@@ -10,37 +10,59 @@ type todoItemsListType = {
 type propsType = {
   title: string;
   todoItemsList: Array<todoItemsListType>;
-  // deliteListItem: Function;
 };
 
-export default function TodoList({ title, todoItemsList }: propsType) {
-  let [list, setList] = useState(todoItemsList);
+type filterValue = 'all' | 'active' | 'complited';
 
-  let deliteListItem = (id: number) => {
-    let filtredList = list.filter(el => el.id!==id)
-    setList(filtredList)
-  }
+export default function TodoList({ title, todoItemsList }: propsType) {
+  let [taskList, setTasklist] = useState(todoItemsList);
+  let [filter, setFilter] = useState<filterValue>('all');
+
+  const filtredTasks =
+    filter === 'active'
+      ? taskList.filter((t) => t.isChecked === false)
+      : filter === 'complited'
+      ? taskList.filter((t) => t.isChecked === true)
+      : taskList;
+
+  const removeTask = (id: number) => {
+    const removedTaskList = taskList.filter((t) => t.id !== id);
+    setTasklist(removedTaskList);
+  };
+
+  const filterTasks = (filter: filterValue) => {
+    setFilter(filter);
+  };
 
   return (
     <div className={s.todoListContainer}>
       <h3>{title}</h3>
       <input type="text" />
       <button>+</button>
-
       <ul>
-        {list.map((el: todoItemsListType) => {
+        {filtredTasks.map((task: todoItemsListType) => {
           return (
-            <li key={el.id}>
-              <input type="checkbox" checked={el.isChecked} onChange={() => console.log('test')} />
-              <span>{el.content}</span>
-              <button onClick={()=> deliteListItem(el.id)}>x</button>
+            <li key={task.id}>
+              <input
+                type="checkbox"
+                checked={task.isChecked}
+                onChange={() => console.log('test')}
+              />
+              <span>{task.content}</span>
+              <button
+                onClick={() => {
+                  removeTask(task.id);
+                }}
+              >
+                x
+              </button>
             </li>
           );
         })}
       </ul>
-      <button>All</button>
-      <button>JS</button>
-      <button>React</button>
+      <button onClick={()=>filterTasks('all')}>Все</button>
+      <button onClick={()=>filterTasks('active')}>Активные</button>
+      <button onClick={()=>filterTasks('complited')}>Выполненные</button>
     </div>
   );
 }
