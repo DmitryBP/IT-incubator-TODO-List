@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { filterValueType } from '../App';
 import s from './todoList.module.scss';
 
 type todoItemsListType = {
@@ -9,60 +9,29 @@ type todoItemsListType = {
 
 type propsType = {
   title: string;
-  todoItemsList: Array<todoItemsListType>;
+  tasks: Array<todoItemsListType>;
+  removeTask: (id: number) => void;
+  cheingeFilter: (filterValue: filterValueType) => void;
 };
 
-type filterValue = 'all' | 'active' | 'complited';
-
-export default function TodoList({ title, todoItemsList }: propsType) {
-  let [taskList, setTasklist] = useState(todoItemsList);
-  let [filter, setFilter] = useState<filterValue>('all');
-
-  const filtredTasks =
-    filter === 'active'
-      ? taskList.filter((t) => t.isChecked === false)
-      : filter === 'complited'
-      ? taskList.filter((t) => t.isChecked === true)
-      : taskList;
-
-  const removeTask = (id: number) => {
-    const removedTaskList = taskList.filter((t) => t.id !== id);
-    setTasklist(removedTaskList);
-  };
-
-  const filterTasks = (filter: filterValue) => {
-    setFilter(filter);
-  };
-
+export default function TodoList({ title, tasks, removeTask, cheingeFilter }: propsType) {
   return (
     <div className={s.todoListContainer}>
       <h3>{title}</h3>
-      <input type="text" />
+      <input />
       <button>+</button>
       <ul>
-        {filtredTasks.map((task: todoItemsListType) => {
-          return (
-            <li key={task.id}>
-              <input
-                type="checkbox"
-                checked={task.isChecked}
-                onChange={() => console.log('test')}
-              />
-              <span>{task.content}</span>
-              <button
-                onClick={() => {
-                  removeTask(task.id);
-                }}
-              >
-                x
-              </button>
-            </li>
-          );
-        })}
+        {tasks.map((t) => (
+          <li>
+            <input type="checkbox" checked={t.isChecked} />
+            {t.content}
+            <button onClick={() => removeTask(t.id)}>x</button>
+          </li>
+        ))}
       </ul>
-      <button onClick={()=>filterTasks('all')}>Все</button>
-      <button onClick={()=>filterTasks('active')}>Активные</button>
-      <button onClick={()=>filterTasks('complited')}>Выполненные</button>
+      <button onClick={() => cheingeFilter('all')}>Все</button>
+      <button onClick={() => cheingeFilter('active')}>Активные</button>
+      <button onClick={() => cheingeFilter('complited')}>Выполненные</button>
     </div>
   );
 }
