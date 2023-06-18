@@ -1,3 +1,55 @@
 .todoListContainer {
   margin-right: 50px;
+  ul {
+    padding: 0;
+  }
+  li {
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+
+  div,
+  li {
+    display: flex;
+    justify-content: space-between;
+  }
+  input {
+    margin-right: 15px;
+    width: 100%;
+  }
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.errorText {
+  font-size: 10px;
+  color: red;
+}
+.errorTextHidden {
+  display: none;
+}
+
+button {
+  border: none;
+  border-radius: 15px;
+  margin-right: 10px;
+}
+.activeFilterBtn {
+  background-color: #cdfbc7;
+  border: none;
+}
+
+.delBtn {
+  height: 20px;
+  width: 20px;
+  background-image: url('./delIcon.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 1px solid red;
+}
+.doneTask{
+  opacity: 50%;
+  text-decoration: line-through;
 }
