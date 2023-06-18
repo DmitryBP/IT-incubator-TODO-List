@@ -8,10 +8,11 @@ type propsType = {
   id: string;
   title: string;
   tasks: Array<todoItemsListType>;
-  removeTask: (id: string) => void;
-  cheingeFilter: (filterValue: filterValueType, todoListId: string ) => void;
-  addTask: (inputValue: string) => void;
-  changeTaskStatus: (id: string) => void;
+  removeTask: (id: string, todoListId: string) => void;
+  removeTodoList: (todoListId: string) => void;
+  cheingeFilter: (filterValue: filterValueType, todoListId: string) => void;
+  addTask: (inputValue: string, todoListId: string) => void;
+  changeTaskStatus: (id: string, todoListId: string) => void;
   filter: string;
 };
 
@@ -20,16 +21,18 @@ export default function TodoList({
   title,
   tasks,
   removeTask,
+  removeTodoList,
   cheingeFilter,
   addTask,
   changeTaskStatus,
   filter,
 }: propsType) {
+
   const [inputValue, setInputValue] = useState('');
   const [errorStatus, setErrorStatus] = useState(false);
 
   const cleanAddedTask = () => {
-    addTask(inputValue);
+    addTask(inputValue, id);
     setInputValue('');
   };
 
@@ -57,7 +60,8 @@ export default function TodoList({
   const onFilterComplited = () => cheingeFilter('complited', id);
   return (
     <div className={s.todoListContainer}>
-      <h3>{title}</h3>
+      <h3>{title}<button onClick={()=>removeTodoList(id)} className={s.delBtn}/></h3>
+      
 
       <div>
         <input
@@ -71,11 +75,11 @@ export default function TodoList({
       {errorStatus === true ? <div className={s.errorText}>Поле обязательно для заполнения</div> : null}
       <ul>
         {tasks.map((t) => {
-          const onRemove = () => removeTask(t.id);
+          const onRemove = () => removeTask(t.id, id);
           return (
             <li key={t.id}>
               <div>
-                <input type="checkbox" onChange={() => changeTaskStatus(t.id)} checked={t.isChecked} />
+                <input type="checkbox" onChange={() => changeTaskStatus(t.id, id)} checked={t.isChecked} />
                 <span className={t.isChecked ? s.doneTask : undefined}>{t.content}</span>
               </div>
               <button onClick={onRemove} className={s.delBtn}></button>
@@ -83,7 +87,7 @@ export default function TodoList({
           );
         })}
       </ul>
-      
+
       <button onClick={onFilterAll} className={filter === 'all' ? s.activeFilterBtn : undefined}>
         Все
       </button>
