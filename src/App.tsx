@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-
 import './App.css';
-import TodoList from './TodoList/TodoList';
+import TodoList, { todoItemsListType } from './TodoList/TodoList';
 import { v1 } from 'uuid';
+import { AddItemForm } from './addItemForm';
 
 export type filterValueType = 'all' | 'active' | 'complited';
 type TodoListType = {
   id: string;
   title: string;
   filter: filterValueType;
+};
+type tasksStateType = {
+  [key: string]: Array<todoItemsListType>;
 };
 
 function App() {
@@ -17,10 +20,10 @@ function App() {
 
   const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
     { id: todoListId1, title: 'Whot to do', filter: 'active' },
-    { id: todoListId2, title: 'Whot to BAY', filter: 'complited' },
+    { id: todoListId2, title: 'Whot to BAY', filter: 'active' },
   ]);
 
-  const [tasksObj, setTasks] = useState({
+  const [tasksObj, setTasks] = useState<tasksStateType>({
     [todoListId1]: [
       { id: v1(), content: 'HTML&CSS', isChecked: false },
       { id: v1(), content: 'JS', isChecked: false },
@@ -61,8 +64,13 @@ function App() {
     setTasks({ ...tasksObj });
   };
 
-  const addTaskList = () => {
-    let 
+  const onChangeHandler2 = (id: string, todoListId: string, taskValue: string) => {
+    const targetTask = tasksObj[todoListId].find((t) => t.id === id);
+    if (targetTask) {
+      console.log(taskValue);
+      targetTask.content = taskValue
+      setTasks({ ...tasksObj });
+    }
   }
 
   const changeTaskStatus = (id: string, todoListId: string) => {
@@ -72,38 +80,44 @@ function App() {
       setTasks({ ...tasksObj });
     }
   };
-
+  const addTodoList = (inputValue: string) => {
+    const newTodoList: TodoListType = { id: v1(), title: inputValue, filter: 'active' };
+    setTodoLists([newTodoList, ...todoLists]);
+    setTasks({ ...tasksObj, [newTodoList.id]: [] });
+  };
   return (
     <div className="App">
-      <div className="todoListsWrapper">
-        {' '}
-        <div className="header">
-          <h3>Cписки дел</h3>
-          <button className="addTaskListBtn" onClick={()=>console.log('test')}><span>Добавить список</span></button>
-        </div>
-        <div className="taskLists">
-          {todoLists.map((t) => {
-            const filtredTasks =
-              t.filter === 'active'
-                ? tasksObj[t.id].filter((t) => t.isChecked === false)
-                : t.filter === 'complited'
-                ? tasksObj[t.id].filter((t) => t.isChecked === true)
-                : tasksObj[t.id];
-            return (
-              <TodoList
-                key={t.id}
-                id={t.id}
-                title={t.title}
-                tasks={filtredTasks}
-                removeTask={removeTask}
-                removeTodoList={removeTodoList}
-                cheingeFilter={cheingeFilter}
-                addTask={addTask}
-                changeTaskStatus={changeTaskStatus}
-                filter={t.filter}
-              />
-            );
-          })}
+      <div className="container">
+        <div className="todoListsWrapper">
+          <div className="header">
+            <h3>Cписки дел</h3>
+            <AddItemForm addItem={addTodoList} />
+          </div>
+          <div className="taskLists">
+            {todoLists.map((t) => {
+              const filtredTasks =
+                t.filter === 'active'
+                  ? tasksObj[t.id].filter((t) => t.isChecked === false)
+                  : t.filter === 'complited'
+                  ? tasksObj[t.id].filter((t) => t.isChecked === true)
+                  : tasksObj[t.id];
+              return (
+                <TodoList
+                  key={t.id}
+                  id={t.id}
+                  title={t.title}
+                  tasks={filtredTasks}
+                  removeTask={removeTask}
+                  removeTodoList={removeTodoList}
+                  cheingeFilter={cheingeFilter}
+                  addTask={addTask}
+                  changeTaskStatus={changeTaskStatus}
+                  filter={t.filter}
+                  onChangeHandler2={onChangeHandler2}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

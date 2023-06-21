@@ -1,8 +1,8 @@
 .todoListContainer {
+  margin-right: 50px;
   h3>button{
     margin-left: 105px;
   }
-  margin-right: 50px;
   ul {
     padding: 0;
   }
@@ -10,7 +10,6 @@
     text-decoration: none;
     margin-bottom: 5px;
   }
-
   div,
   li {
     display: flex;
@@ -18,8 +17,15 @@
   }
   input {
     margin-right: 15px;
-    width: 100%;
   }
+}
+
+.inputFild {
+  width: 80%;
+}
+
+.todoListContainer:last-child {
+  margin-right: 0;
 }
 
 .error {
@@ -55,4 +61,9 @@ button {
 .doneTask{
   opacity: 50%;
   text-decoration: line-through;
+}
+
+input {
+  padding: 0;
+  margin: 0;
 }

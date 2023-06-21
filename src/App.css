@@ -1,24 +1,25 @@
+.container {
+  justify-content: center;
+}
+.todoListsWrapper {
+  /* border: 1px solid red; */
+  display: inline-flex;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 50px;
+  flex-direction: column;
+}
 .header,
 .taskLists,
-.todoListsWrapper {
+.container {
   display: flex;
 }
 .header {
   justify-content: space-between;
   align-items: center;
+  /* border: 1px solid rgb(30, 235, 7); */
 }
 .taskLists {
+  /* border: 1px solid rgb(0, 106, 255); */
   justify-content: left;
-}
-.todoListsWrapper {
-  padding: 50px;
-  flex-direction: column;
-}
-
-.addTaskListBtn{
-  border: 1px solid rgb(74, 74, 74);
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 50px;
-  
 }
